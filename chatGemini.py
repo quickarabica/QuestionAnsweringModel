@@ -5005,8 +5005,8 @@ while True:
         print(f'Bot: {model_response}')
         print()
     
-history.append({"user_input": user_input, "model_response": model_response})
-print(history)
+# history.append({"user_input": user_input, "model_response": model_response})
+# print(history)
     
     
 
