@@ -4938,7 +4938,7 @@ model = genai.GenerativeModel(
     MATCH (e {{name: entity}})-[r:relation]->(related)
     RETURN e,r,related
     make sure the arrow: -> is correctly pointed everytime it may not be towards related sometime it can be away too
-    
+    give only single cypher query
     just give output for cypher as:
     Cypher code is:
     (the code)
@@ -4948,6 +4948,7 @@ model = genai.GenerativeModel(
     give the answer in that language too
     only for cypher: entity name will be translated to 
     english only
+    
     """
     
 )
