@@ -4924,9 +4924,9 @@ model = genai.GenerativeModel(
         HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
     },
     system_instruction=f"""{data}
-         
+        Scan the data thoroughly and do not leave the answers incomplete, check more than twice before giving answers.
     Please help me answer questions related to this dataset.Ignore the 
-    tail label for those which have O. return with all the possible answers. 
+    tail label for those which have O. return with ALL the possible answers. 
     i will give some questions based on which extract the keywords from the question, 
     and fetch the relation along with the answer based on the keyword.
     make sure the answer is direct and exactly all answers should be given NOTHING SHOULD BE LEFT, take some time but scan the csv perfectly.
