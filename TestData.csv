@@ -9,3 +9,5 @@ Some of the agroforestry models include?,"Some of the agroforestry models includ
 what is caused by a fungi?,"A fungi can cause Oak wilt, Root rot, Gray mold rot,  Fusarium wilt, Rot,  acervuli, Basal rot, and  wilt diseases.","MATCH (e {name: ""fungi""})-[r:Caused_By]<-(related) RETURN e,r,related"
 Synonym of rice?,Synonym of rice is Oryza sativa L.,"MATCH (e {name: 'rice'})-[r:Synonym_Of]->(related) RETURN e,r,related"
 Linear mixed models is used for?,Linear mixed models are used for microclimate measurements. ,"MATCH (e {name: 'linear mixed models'})-[r:Used_For]->(related) RETURN e,r,related"
+organic debris includes?,Organic debris includes rotting vegetation, "MATCH (e {name: "Organic debris"})-[r:Includes]->(related) RETURN e,r,related"
+plant debris includes?,Plant debris includes animal wastes,"MATCH (e {name: 'plant debris'})-[r:Includes]->(related) RETURN e,r,related"
