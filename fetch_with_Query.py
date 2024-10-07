@@ -4,42 +4,16 @@ from neo4j import GraphDatabase
 uri = "bolt://localhost:7687"
 driver = GraphDatabase.driver(uri, auth=("neo4j", "12345678"))  # Replace with your Neo4j credentials
 
-def get_entity_info(tx, entity, relation=None, related_entity=None):
+def get_entity_info( entity, relation=None, related_entity=None):
     if entity and relation and related_entity:
         query = f"""
-        MATCH (e {{name: '{entity}'}})-[r:{relation}]->(related {{name: '{related_entity}'}})
-        RETURN e,r,related
-        LIMIT 1
-        """
-        print("Generated Query:")
-        print(query)
-    elif relation:
-        query = f"""
         MATCH (e {{name: '{entity}'}})-[r:{relation}]->(related)
-        RETURN e.name AS entity1, labels(e) AS head_label, type(r) AS relation, related.name AS entity2, labels(related) AS tail_label
-        LIMIT 1
+        RETURN e,r,related
+        
         """
         print("Generated Query:")
         print(query)
-    else:
-        query = f"""
-        MATCH (e {{name: '{entity}'}})
-        RETURN e.name AS entity1, labels(e) AS head_label
-        LIMIT 1
-        """
-        print("Generated Query:")
-        print(query)
-    
-    # Print the generated query for debugging
-    
-    
-    result = tx.run(query)  # Running the generated query
-    record = result.single()
-    
-    if record:
-        # Convert the Record to a dictionary
-        return dict(record)
-    return None
+
 
 def fetch_detailed_info(entities, relations=None, related_entities=None):
     detailed_info = []

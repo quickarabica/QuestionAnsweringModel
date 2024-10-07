@@ -12,7 +12,7 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Load CSV data
-file = r"C:\Users\priya\Desktop\Sem5 Project\agri.csv"
+file = r"C:\Users\priya\Desktop\New folder\agri.csv"
 
 data = pd.read_csv(file)
 
@@ -45,16 +45,16 @@ model = genai.GenerativeModel(
         Please help me answer questions related to this dataset. Return with ALL the possible answers. 
         i will give some questions based on which extract the keywords from the question, 
         and fetch the relation along with the answer based on the keyword.
-        make sure the answer is direct and exactly all answers should be given NOTHING SHOULD BE LEFT, take some time but scan the data perfectly.
+        make sure the answer is direct and exactly all answers should be given NOTHING SHOULD BE LEFT, 
+        take some time but scan the data perfectly.
         i dont need to see relations of the entities.
         make sure the answers are only from dataset given and if multiple matches give all.
         Give the answer in a paragraph manner!
         Make sure the answers are unique.
         Also make a cypher query for knowledge.
-        lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be:
-        MATCH (e {{name: entity}})-[r:relation]->(related)
+        lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be stricly this:
+        MATCH (e {{name: entity}})-[r:relation]-(related)
         RETURN e,r,related
-        make sure the arrow: -> is correctly pointed everytime it may not be towards related sometime it can be away too
         give only single cypher query
         just give output for cypher as:
         Cypher code is:
@@ -64,9 +64,8 @@ model = genai.GenerativeModel(
         Now, if i ask the question in whatever language, 
         give the answer in that language too
         only for cypher: entity name will be translated to 
-        english only
-            """
-)
+        english only.
+        """)
 
 # Initialize conversation history
 history = []
@@ -94,6 +93,11 @@ def answer_question(question):
             return f"No relation found between {entity1} and {entity2}."
     else:
         return "Please provide a valid question format."
+
+def generate_cypher_query(entity, relation):
+    cypher_query = f"""MATCH (e {{name: '{entity}'}})-[r:{relation}]->(related)
+    RETURN e, r, related"""
+    return cypher_query
 
 print("Bot: Hello!!!\n")
 while True:

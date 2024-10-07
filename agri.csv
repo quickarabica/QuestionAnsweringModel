@@ -105,7 +105,7 @@ kharif,Crop,Seasonal,rainy,Season
 organic farming and tillage,Agri_Method,Helps_In,soil health,Soil
 hay,Agri_Waste,Conjunction,silage,Agri_Waste
 acervuli,Disease,Caused_By,Colletotrichum,Organism
-apple,Fruit,Origin_Of,Kashmir ,Location
+apple,Fruit,Origin_Of,Kashmir,Location
 Root rot,Disease,Caused_By,fungi,Organism
 Alphonso,Fruit,Origin_Of,India,Location
 oil palm,Crop,Origin_Of,tropical forest,Location
@@ -2331,7 +2331,7 @@ Agricultural contaminants,Agri_Pollution,Includes,insecticides,Chemical
 farm residue,O,Includes,animal wastes,Agri_Waste
 plant debris,O,Includes,animal wastes,Agri_Waste
 waste material,O,Includes,animal wastes,Agri_Waste
-    ,O,Includes,animal wastes,Agri_Waste
+,O,Includes,animal wastes,Agri_Waste
 biodegradable waste,Agri_Waste,Includes,animal wastes,Agri_Waste
 organic matter,Natural_Resource,Includes,animal wastes,Agri_Waste
 Gardening,O,Conjunction,Farming,O

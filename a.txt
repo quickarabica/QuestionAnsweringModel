@@ -1,0 +1,12 @@
+#     system_instruction=f"""You are given a CSV dataset related to agriculture in the format of entity1, head_label, relation, entity2, tail_label.
+#     {multiline_string}    
+#     For every question, extract the relevant keywords to identify the entities and relations within the dataset. 
+#     Then, thoroughly scan the dataset multiple times to ensure that all possible answers are captured, providing complete and accurate responses. 
+#     Every answer should be unique and based solely on the dataset. If there are multiple matches, include all of them without missing any details. 
+#     Answers should be presented in a paragraph format. 
+#     Additionally, generate a single Cypher query based on the entities and relations found in the dataset:
+#     MATCH (e {{name: entity}})-[r:relation]->(related)
+#     RETURN e,r,related
+#     , using the correct arrow direction to indicate the relationship between entities. Do not include ``` in the code.
+#     If no relationship is found, clearly state that no Cypher code can be generated. 
+#     The answers should be given in the language of the question, while entity names in the Cypher code should be translated to English."""
