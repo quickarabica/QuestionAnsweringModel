@@ -18,3 +18,9 @@ origin of bacterial blight?,Bacterial blight originated in the **Caribbean** **A
 bacterial wilt is caused by?,Bacterial wilt is caused by Erwinia Pseudomonas Xanthomonas and genera Corynebacterium., "MATCH (e {name: 'Bacterial wilt'})-[r:Caused_By]->(related) RETURN e,r,related"
 Land pollution is caused by?,Land pollution is caused by Agricultural and horticultural processes. ,"MATCH (e {name: 'Land pollution'})-[r:Caused_By]->(related) RETURN e,r,related"
 Farm pollution includes?,Farm pollution includes weed killers weed control chemicals herbicides.,"MATCH (e {name: "Farm pollution"})-[r:Includes]-(related) RETURN e,r,related"
+oranges coreferences to?,"Oranges coreferences to  **Citrus fruits**, **Tangerines**, **Fruit**","MATCH (e {name: "oranges"})-[:Coreference]-(related) RETURN e,r,related"
+origin of the fruit date?,"The fruit date is originated from Middle East.","MATCH (e {name: 'dates'})-[r:Origin_Of]-(related) RETURN e,r,related"
+
+
+HINDI:
+टी&वी की उत्पत्ति,टी&वी की उत्पत्ति भारत में हुई थी.,"MATCH (e {name: 'Training and Visit (T&V) extension'})-[r:Origin_Of]-(related) RETURN e,r,related"

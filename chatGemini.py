@@ -38,7 +38,7 @@ model = genai.GenerativeModel(
     },
     system_instruction=f"""
         You are an expert in analyzing CSV dataset related to agriculture, 
-        the format of the csv data is (entity1,head_label,relation,entity2,tail_label).
+        the format of the csv data is (entity1,head_label,relation,entity2,tail_label)
         the data is given below:
         {multiline_string}
         Scan the data thoroughly and do not leave the answers incomplete, check more than twice before giving answers.

@@ -1,5 +1,5 @@
 import openai
-openai.api_key='sk-svcacct-IYG-92_kn0qkjVv9X9Efc8WCQbTccuPwD78HlquBZdRuE-Lct7iKICnlBkyT3BlbkFJISoWW9ABQ2kGhzgJcoB1GxfmjJIcE3fzoI4BFXG_RXI1FuQlbs-2dZMPyzgA'
+openai.api_key='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'
 messages = [ {"role": "system", "content":"You are a intelligent assistant."} ]
 while True:
    message = "Raj"
