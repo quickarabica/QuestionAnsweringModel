@@ -1,5 +1,10 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import pandas as pd
+from dotenv import load_dotenv
+from huggingface_hub import login
+
+load_dotenv()
+login(token=os.getenv("HUGGING_FACE_API"))
 
 tokenizer = AutoTokenizer.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
 model = AutoModelForCausalLM.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
