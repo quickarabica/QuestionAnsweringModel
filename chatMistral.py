@@ -4,51 +4,56 @@ import pandas as pd
 tokenizer = AutoTokenizer.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
 model = AutoModelForCausalLM.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
 
-data = [
-    {"entity1": "Agricultural", "head_label": "Agri_Process", "relation": "Conjunction", "entity2": "horticultural", "tail_label": "Agri_Process"},
-    {"entity1": "yellow stem bore", "head_label": "Organism", "relation": "Conjunction", "entity2": "rice leaf folder", "tail_label": "Organism"},
-    {"entity1": "millet crops", "head_label": "Crop", "relation": "Includes", "entity2": "brown top millet", "tail_label": "Crop"}
-]
+file = r"C:\Users\ranit\OneDrive\Desktop\git\agri.csv"
+data = pd.read_csv(file)
 
-df = pd.DataFrame(data)
+multiline_string = data.to_string(index=False)
 
 def search_dataset(query):
-    df_filtered = df[df['tail_label'] != 'O']
-    result = df_filtered[
-        (df_filtered['entity1'].str.contains(query, case=False)) |
-        (df_filtered['entity2'].str.contains(query, case=False)) |
-        (df_filtered['head_label'].str.contains(query, case=False)) |
-        (df_filtered['tail_label'].str.contains(query, case=False))
+    df_filtered = data[
+        (data['entity1'].str.contains(query, case=False)) |
+        (data['entity2'].str.contains(query, case=False)) |
+        (data['head_label'].str.contains(query, case=False)) |
+        (data['tail_label'].str.contains(query, case=False))
     ]
-    return result
+    return df_filtered
 
-def generate_response(prompt):
-    instruction = """
-    Answer questions related to this dataset. Ignore the tail label for those which have 'O'. 
-    Return all possible answers. Extract the keywords from the question, and fetch the relation along with the answer 
-    based on the keyword. Make sure the answer is direct and complete. Scan the dataset perfectly, and give all answers 
-    without leaving anything. The answer should be in paragraph form and unique.
-    """
-    dataset_result = search_dataset(prompt)
+def generate_response(question):
+    dataset_result = search_dataset(question)
+    
     if not dataset_result.empty:
         answers = []
-        for index, row in dataset_result.iterrows():
-            answers.append(f"{row['entity1']} has a relationship with {row['entity2']}.")
-        response = " ".join(set(answers))
-        return response
+        for _, row in dataset_result.iterrows():
+            answers.append(f"{row['entity1']} has a relation with {row['entity2']} through {row['relation']}.")
+        response = " ".join(answers)
     else:
-        inputs = tokenizer(instruction + prompt, return_tensors="pt")
+        prompt = f"""
+        You are an expert in analyzing CSV datasets related to agriculture. 
+        The format of the data is (entity1, head_label, relation, entity2, tail_label). 
+        The dataset is below:\n{multiline_string}\n
+        Scan the data thoroughly and answer questions related to this dataset.
+        Question: {question}
+        """
+        inputs = tokenizer(prompt, return_tensors="pt")
         outputs = model.generate(**inputs, max_length=150, num_return_sequences=1)
         response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        return response
+    
+    return response
+
+def generate_cypher_query(entity, relation):
+    cypher_query = f"MATCH (e {{name: '{entity}'}})-[r:{relation}]->(related) RETURN e, r, related"
+    return cypher_query
 
 def chat():
-    print("Welcome to the Agriculture Chatbot! Type 'exit' to quit.")
+    print("Bot: Hello! I'm your agriculture expert chatbot.\n")
+
     while True:
         user_input = input("You: ")
-        if user_input.lower() == "exit":
-            print("Goodbye!")
+        
+        if user_input.lower() in ['exit', 'quit']:
+            print("Bot: Goodbye!")
             break
+        
         response = generate_response(user_input)
         print(f"Bot: {response}")
 
