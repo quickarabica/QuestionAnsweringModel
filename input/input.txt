@@ -1,0 +1,20 @@
+entity1,head_label,relation,entity2,tail_label
+Agricultural,Agri_Process,Conjunction,horticultural,Agri_Process
+yellow stem bore,Organism,Conjunction,rice leaf folder,Organism
+millet crops,Crop,Includes,brown top millet,Crop
+Agricultural contaminants,Agri_Pollution,Includes,pesticides,Chemical
+storms,Natural_Disaster,Conjunction,flood,Natural_Disaster
+yield-enhancing,O,Conjunction,variance-reducing,O
+Multi Layer Perceptron,ML_Model,Synonym_Of,MLP,ML_Model
+staple food crops,Crop,Includes,corn,Crop
+fungi,Organism,Includes,Fusarium,Organism
+The hydroponic technique,Agri_Method,Used_For,green fodder,Crop
+hydroponics fodder,Crop,Used_For,animals,Organism
+Fusarium wilt,Disease,Caused_By,Fusarium oxysporum,Organism
+agronomic crops,Crop,Includes,roots and tuber crops,Crop
+pear,Fruit,Conjunction,apple,Fruit
+CTR,Agri_Method,Synonym_Of,conventional transplanted rice,Agri_Method
+Indo-Gangetic Plains of India,Organization,Synonym_Of,IGP,Organization
+South Eastern region,Location,Includes,Montenegro,Location
+bacteria,Organism,Conjunction,fungi,Organism
+oil palm,Crop,Origin_Of,West Africa,Location
