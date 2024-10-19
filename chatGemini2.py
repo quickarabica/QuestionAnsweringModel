@@ -37,7 +37,7 @@ model = genai.GenerativeModel(
         HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
     },
     system_instruction=f"""
-    You are an expert in analyzing CSV dataset related to agriculture, 
+        You are an expert in analyzing CSV dataset related to agriculture, 
         the format of the csv data is (entity1,head_label,relation,entity2,tail_label)
         the data is given below:
         {multiline_string}
@@ -54,7 +54,7 @@ model = genai.GenerativeModel(
         Also make a cypher query for knowledge.
         lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be stricly this:
         MATCH (e {{name: entity}})-[r:relation]-(related) RETURN e,r,related
-        give only single cypher query
+        give only single cypher query, the entity here is the one you extracted from the question which matches in the dataset both case senstive wise and spelling wise
         just give output for cypher as:
         Cypher code is: (the code)
         and dont include ``` this is in the answer.
@@ -81,6 +81,7 @@ def generate_cypher_query(model_response):
     else:
         return None
 
+
 def visualize_graph(cypher_query):
     results = graph.run(cypher_query).data()
     
@@ -97,12 +98,20 @@ def visualize_graph(cypher_query):
         net.add_node(node1_name, label=node1_name)
         net.add_node(node2_name, label=node2_name)
 
-        # Add an edge with relationship label
-        net.add_edge(node1_name, node2_name, title=relationship)
+        # Add an edge with relationship label and directional arrow
+        net.add_edge(
+            node1_name,
+            node2_name,
+            title=relationship, 
+            label=relationship,  # Display the relationship name on the edge
+            color='red', 
+            arrows='to', 
+            length=150  # You can adjust the length and color as needed
+        ) # You can adjust the length and color as needed
 
     # Save the interactive graph as an HTML file
     net.save_graph('answer.html')
-    print("Interactive graph generated and saved as 'answer.html'.")
+    print("Interactive graph generated and saved as 'answer.html'.\n")
 
 def answer_question(question):
     # Send question to Gemini AI model

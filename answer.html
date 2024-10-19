@@ -282,8 +282,8 @@ function highlightFilter(filter) {
                   
 
                   // parsing and collecting nodes and edges from the python
-                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "greenhouse gases", "label": "greenhouse gases", "shape": "dot"}, {"color": "#97c2fc", "id": "carbon dioxide", "label": "carbon dioxide", "shape": "dot"}, {"color": "#97c2fc", "id": "methane", "label": "methane", "shape": "dot"}, {"color": "#97c2fc", "id": "nitrous oxide", "label": "nitrous oxide", "shape": "dot"}]);
-                  edges = new vis.DataSet([{"from": "greenhouse gases", "title": "Includes", "to": "carbon dioxide"}, {"from": "greenhouse gases", "title": "Includes", "to": "methane"}, {"from": "greenhouse gases", "title": "Includes", "to": "nitrous oxide"}]);
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Nitrate", "label": "Nitrate", "shape": "dot"}, {"color": "#97c2fc", "id": "crop yield", "label": "crop yield", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "red", "from": "Nitrate", "label": "Helps_In", "length": 500, "title": "Helps_In", "to": "crop yield"}]);
 
                   nodeColors = {};
                   allNodes = nodes.get({ returnType: "Object" });

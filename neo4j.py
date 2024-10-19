@@ -4,6 +4,7 @@ from py2neo import Graph
 graph = Graph("bolt://localhost:7687", auth=("neo4j", "12345678")) 
 def visualize_graph(cypher_query):
     results = graph.run(cypher_query).data()
+    net = Network(notebook=True, cdn_resources='remote')
     
     # Create a Network object for the interactive graph
     net = Network(notebook=True)
@@ -19,10 +20,18 @@ def visualize_graph(cypher_query):
         net.add_node(node2_name, label=node2_name)
 
         # Add an edge with relationship label
-        net.add_edge(node1_name, node2_name, title=relationship)
+        net.add_edge(
+            node1_name,
+            node2_name,
+            title=relationship, 
+            label=relationship,  # Display the relationship name on the edge
+            color='red', 
+            arrows='to', 
+            length=150  # You can adjust the length and color as needed
+        )
 
     # Save the interactive graph as an HTML file
-    net.save_graph('neo4j_graph.html')
+    net.save_graph('answer.html')
     print("Interactive graph generated and saved as 'neo4j_graph.html'.")
 
-visualize_graph("MATCH (e {name: 'Mango'})-[r:Includes]-(related) RETURN e,r,related")
+visualize_graph("MATCH (e {name: 'farm residue'})-[r:Includes]-(related) RETURN e,r,related")
