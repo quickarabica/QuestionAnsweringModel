@@ -5,7 +5,7 @@ from google.generativeai.types import generation_types
 from dotenv import load_dotenv
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from py2neo import Graph
-import graphviz
+from pyvis.network import Network
 
 # Load environment variables
 load_dotenv()
@@ -84,20 +84,25 @@ def generate_cypher_query(model_response):
 def visualize_graph(cypher_query):
     results = graph.run(cypher_query).data()
     
-    dot = graphviz.Digraph(comment='Neo4j Graph')
+    # Create a Network object for the interactive graph
+    net = Network(notebook=True, cdn_resources='remote')
 
+    # Add nodes and edges to the interactive graph
     for result in results:
         node1_name = result['e']['name']
         node2_name = result['related']['name']
         relationship = result['r'].__class__.__name__
-        
-        dot.node(node1_name, node1_name)
-        dot.node(node2_name, node2_name)
-        dot.edge(node1_name, node2_name, label=relationship)
 
-    # Save the visualization as PNG
-    dot.render('neo4j_graph', format='png')
-    print("Graph generated and saved as 'neo4j_graph.png'.")
+        # Add nodes with a unique ID
+        net.add_node(node1_name, label=node1_name)
+        net.add_node(node2_name, label=node2_name)
+
+        # Add an edge with relationship label
+        net.add_edge(node1_name, node2_name, title=relationship)
+
+    # Save the interactive graph as an HTML file
+    net.save_graph('answer.html')
+    print("Interactive graph generated and saved as 'answer.html'.")
 
 def answer_question(question):
     # Send question to Gemini AI model
@@ -106,7 +111,7 @@ def answer_question(question):
     
     # Extract the response text
     model_response = response.text
-    print(f'Bot: {model_response}\n')
+    print(f'Bot: {model_response}')
 
     # Extract Cypher query if available and visualize
     cypher_query = generate_cypher_query(model_response)
