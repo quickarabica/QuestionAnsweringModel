@@ -2,7 +2,7 @@ from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 
 # Initialize the Ollama model
-llm = OllamaLLM(model="llama3")
+llm = OllamaLLM(model="llama3.2")
 
 # Load the dataset and create a graph
 def load_and_create_graph(file_path):
@@ -44,33 +44,26 @@ def chat_with_bot(user_input, graph):
 
     # Define a chat prompt template
     prompt_template = ChatPromptTemplate.from_template("""
-    You are an expert in analyzing CSV dataset related to agriculture, 
+    You are an expert in analyzing text file that is organised like a CSV dataset related to agriculture, 
     the format of the csv data is (entity1,head_label,relation,entity2,tail_label)
     Relevant Data:
     {dataset_context}
-    Scan the data thoroughly and do not leave the answers incomplete, check more than twice before giving answers.
-    Please help me answer questions related to this dataset. Return with ALL the possible answers. 
-    i will give some questions based on which extract the keywords from the question, 
-    and fetch the relation along with the answer based on the keyword.
-    make sure the answer is direct and exactly all answers should be given NOTHING SHOULD BE LEFT, 
-    take some time but scan the data perfectly.
-    i dont need to see relations of the entities.
-    make sure the answers are only from dataset given and if multiple matches give all.
-    Give the answer in a paragraph manner!
-    Make sure the answers are unique.
-    Also make a cypher query for knowledge.
-    lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be stricly this:
-    "MATCH (e {{name: entity}})-[r:relation]-(related)
-    RETURN e,r,related"
-    give only single cypher query
-    just give output for cypher as:
-    Cypher code is:
-    "(the code)"
-    and dont include ``` this is in the answer.
-    If there is NO relation found, do not generate cypher code, just print No cypher code for the above answer.
-    User's question: {user_input}
-    Just give the direct answers, based on the prompts given above strictly!!
+    Answer any question related to this dataset,
+    i will give some questions based on which you will extract the keyword entity and the keyword relation. 
+    Then you will run a search with the respective entity and keyword, on the chunk data, and return an answer in a single sentence format.
+    "For example, question: what does mango include?, answer is: Mango includes Chausa mango, Kesar mangoes, Safeda, Himsagar and Langra."
+    User's question: {user_input}  
+    if there are mulitple answers for a question, include all of them in the answer.
     
+    You do not need to show how you are getting the answer, just return ONLY the end answer that you are getting directly!
+    Also make a cypher query for knowledge graph.
+    lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be STRICTLY this:
+    "MATCH (e {{name: entity}})-[r:relation]->(related)
+    RETURN e,r,related"
+    the entity and relation are case senstive, while cypher code. mind it!
+    give only single cypher query.
+    User's question: {user_input}
+    Just give the direct answers in a proper sentence format and the cypher code dont include ``` in the code, based on the prompts given above strictly!!
     """)
 
     # Format the prompt with the dataset context and user input

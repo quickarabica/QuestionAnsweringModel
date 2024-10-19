@@ -4,6 +4,8 @@ import google.generativeai as genai
 from google.generativeai.types import generation_types
 from dotenv import load_dotenv
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from py2neo import Graph
+import graphviz
 
 # Load environment variables
 load_dotenv()
@@ -13,12 +15,10 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Load CSV data
 file = r"C:\Users\priya\Desktop\New folder\agri.csv"
-
 data = pd.read_csv(file)
 
 # Convert to string format (if necessary for processing or embedding into the model)
 multiline_string = data.to_string(index=False)
-
 
 # Create the model with safer configuration
 generation_config = {
@@ -37,7 +37,7 @@ model = genai.GenerativeModel(
         HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
     },
     system_instruction=f"""
-        You are an expert in analyzing CSV dataset related to agriculture, 
+    You are an expert in analyzing CSV dataset related to agriculture, 
         the format of the csv data is (entity1,head_label,relation,entity2,tail_label)
         the data is given below:
         {multiline_string}
@@ -53,53 +53,67 @@ model = genai.GenerativeModel(
         Make sure the answers are unique.
         Also make a cypher query for knowledge.
         lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be stricly this:
-        "MATCH (e {{name: entity}})-[r:relation]-(related)
-        RETURN e,r,related"
-        In the cypher code make sure the arrow is towards whatever is necessary.
+        MATCH (e {{name: entity}})-[r:relation]-(related) RETURN e,r,related
         give only single cypher query
         just give output for cypher as:
-        Cypher code is:
-        "(the code)"
+        Cypher code is: (the code)
         and dont include ``` this is in the answer.
         If there is NO relation found, do not generate cypher code, just print No cypher code for the above answer.
         Now, if i ask the question in whatever language, 
         give the answer in that language too
         only for cypher: entity name will be translated to 
         english only.
-        """)
-
+"""
+)
+    
 # Initialize conversation history
 history = []
 
-def answer_question(question):
-    question = question.lower()
-    
-    entity1 = None
-    entity2 = None
+# Connect to Neo4j
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "12345678"))
 
-    if "relation" in question:
-        parts = question.split("between")
-        if len(parts) > 1:
-            entities = parts[1].strip().split("and")
-            if len(entities) == 2:
-                entity1 = entities[0].strip()
-                entity2 = entities[1].strip()
-    
-    if entity1 and entity2:
-        result = data[(data['entity1'].str.lower() == entity1) & (data['entity2'].str.lower() == entity2)]
-        
-        if not result.empty:
-            return result['relation'].tolist()
-        else:
-            return f"No relation found between {entity1} and {entity2}."
+def generate_cypher_query(model_response):
+    cypher_start = "Cypher code is: "
+    if cypher_start in model_response:
+        start_idx = model_response.index(cypher_start) + len(cypher_start)
+        cypher_query = model_response[start_idx:]
+        return cypher_query
     else:
-        return "Please provide a valid question format."
+        return None
 
-# def generate_cypher_query(entity, relation):
-#     cypher_query = f"""MATCH (e {{name: '{entity}'}})-[r:{relation}]->(related)
-#     RETURN e, r, related"""
-#     return cypher_query
+def visualize_graph(cypher_query):
+    results = graph.run(cypher_query).data()
+    
+    dot = graphviz.Digraph(comment='Neo4j Graph')
 
+    for result in results:
+        node1_name = result['e']['name']
+        node2_name = result['related']['name']
+        relationship = result['r'].__class__.__name__
+        
+        dot.node(node1_name, node1_name)
+        dot.node(node2_name, node2_name)
+        dot.edge(node1_name, node2_name, label=relationship)
+
+    # Save the visualization as PNG
+    dot.render('neo4j_graph', format='png')
+    print("Graph generated and saved as 'neo4j_graph.png'.")
+
+def answer_question(question):
+    # Send question to Gemini AI model
+    chat_session = model.start_chat(history=history)
+    response = chat_session.send_message(question)
+    
+    # Extract the response text
+    model_response = response.text
+    print(f'Bot: {model_response}\n')
+
+    # Extract Cypher query if available and visualize
+    cypher_query = generate_cypher_query(model_response)
+    visualize_graph(cypher_query)
+    return model_response
+
+# Chatbot interaction
 print("\nWelcome to the Agriculture Chatbot! Type 'exit' or 'quit' to quit.")
 print("Bot: Hello!!!\n")
 while True:
@@ -110,18 +124,6 @@ while True:
         print("Bot: Goodbye!")
         break
 
-    # Answer the question using the custom function
-    model_response = answer_question(user_input)
-    print(f'Question: {user_input}')
-    
-    # If no response, use the model to generate a response
-    if isinstance(model_response, str):
-        chat_session = model.start_chat(history=history)
-        try:
-            response = chat_session.send_message(user_input)
-            model_response = response.text
-        except generation_types.StopCandidateException as e:
-            model_response = f"Error: {e}"
+    # Answer the question and handle response
+    answer_question(user_input)
 
-        print(f'Bot: {model_response}')
-        print()
