@@ -53,8 +53,9 @@ model = genai.GenerativeModel(
         Make sure the answers are unique.
         Also make a cypher query for knowledge.
         lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be stricly this:
-        MATCH (e {{name: entity}})-[r:relation]-(related)
-        RETURN e,r,related
+        "MATCH (e {{name: entity}})-[r:relation]-(related)
+        RETURN e,r,related"
+        In the cypher code make sure the arrow is towards whatever is necessary.
         give only single cypher query
         just give output for cypher as:
         Cypher code is:
@@ -99,6 +100,7 @@ def generate_cypher_query(entity, relation):
     RETURN e, r, related"""
     return cypher_query
 
+print("\nWelcome to the Agriculture Chatbot! Type 'exit' or 'quit' to quit.")
 print("Bot: Hello!!!\n")
 while True:
     user_input = input("You: ")

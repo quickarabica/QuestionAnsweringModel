@@ -23,4 +23,4 @@ origin of the fruit date?,"The fruit date is originated from Middle East.","MATC
 
 
 HINDI:
-टी&वी की उत्पत्ति,टी&वी की उत्पत्ति भारत में हुई थी.,"MATCH (e {name: 'Training and Visit (T&V) extension'})-[r:Origin_Of]-(related) RETURN e,r,related"
+टी&वी की उत्पत्ति,टी&वी की उत्पत्ति भारत में हुई थी.,"MATCH (e {name: 'Training and Visit (T&V) extension'})-[r:Origin_Of]-(related) RETURN e,r,related"    
