@@ -51,6 +51,7 @@ model = genai.GenerativeModel(
         make sure the answers are only from dataset given and if multiple matches give all.
         Give the answer in a paragraph manner!
         Make sure the answers are unique.
+        ALL ANSWERS MUST BELONG TO THE CSV
         Also make a cypher query for knowledge.
         lets say you get the entity as the keyword FROM THE QUESTION and you identify the relation, the code would be stricly this:
         MATCH (e {{name: entity}})-[r:relation]-(related) RETURN e,r,related
@@ -63,7 +64,7 @@ model = genai.GenerativeModel(
         give the answer in that language too
         only for cypher: entity name will be translated to 
         english only.
-"""
+        """
 )
     
 # Initialize conversation history
@@ -111,6 +112,7 @@ def visualize_graph(cypher_query):
 
     # Save the interactive graph as an HTML file
     net.save_graph('answer.html')
+    
     print("Interactive graph generated and saved as 'answer.html'.\n")
 
 def answer_question(question):

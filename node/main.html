@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="main.css">
+    <title>Knowledge Graph UI</title>
+</head>
+
+<body>
+
+    <!-- Top Icon -->
+    <div class="icon">
+        <i class="fa-solid fa-microchip"></i>
+    </div>
+
+    <!-- Search Container -->
+    <div class="search-container">
+        <input type="text" id="questionInput" class="search-bar" placeholder="Value">
+        <div class="search" id="submitButton" onclick="submitQuestion()"><i class="fa-solid fa-circle-radiation"></i></div>
+    </div>
+
+    <!-- Button -->
+    <button class="button" onclick="submitQuestion()">Knowledge Graph</button>
+
+    <!-- Card Section -->
+    <div class="card">
+        <h2>Question</h2>
+        <div class="menu-description">
+            <div class="star"><i class="fa-solid fa-star"></i></div>
+            <p id="responseText">Corresponding Answer</p>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <a href="#">← Previous</a>
+        <a href="#">Next →</a>
+    </div>
+    <script>
+        async function submitQuestion() {
+            const question = document.getElementById('questionInput').value;
+            if (question) {
+                try {
+                    const response = await fetch('http://localhost:3000/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ question })
+                    });
+
+                    const data = await response.json();
+                    // Update the card with the response
+                    document.getElementById('responseText').textContent = JSON.stringify(data.data);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                alert('Please enter a question.');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -27,11 +27,11 @@ def visualize_graph(cypher_query):
             label=relationship,  # Display the relationship name on the edge
             color='red', 
             arrows='to', 
-            length=150  # You can adjust the length and color as needed
+            length=220  # You can adjust the length and color as needed
         )
 
     # Save the interactive graph as an HTML file
     net.save_graph('answer.html')
     print("Interactive graph generated and saved as 'neo4j_graph.html'.")
 
-visualize_graph("MATCH (e {name: 'farm residue'})-[r:Includes]-(related) RETURN e,r,related")
+visualize_graph("MATCH (e {name: 'Farmers'})-[r:Helps_In]->(related) RETURN e,r,related")
